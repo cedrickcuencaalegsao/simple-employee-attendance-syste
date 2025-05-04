@@ -6,7 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendanceController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [
+    Route::get('/', [
         AuthController::class,
         'index'
     ])->name('login.page');
@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
         AttendanceController::class,
         'index'
     ])->name('view.attendance');
-    
+
     Route::post('/logout',[
         AuthController::class,
         'logout'
@@ -33,4 +33,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
         AdminController::class,
         'index'
     ])->name('dashboard');
+    Route::get('/addEmployee', [
+        AdminController::class,
+        'addNewEmployeeIndex'
+    ])->name('add.employee');
+    Route::get('/checkAttendance/{uuid}', [
+        AdminController::class,
+        'checkAttendanceIndex'
+    ])->name('check.attendance');
+    Route::post('/addEmployee', [
+        AdminController::class,
+        'saveNewEmployee'
+    ])->name('save.employee');
 });

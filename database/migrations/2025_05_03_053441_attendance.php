@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('attendance', function(Blueprint $table){
             $table->id();
-            $table->string('uuid',15)->unique();
-            $table->string('attID', 15)->nullable();
+            $table->string('uuid',15);
+            $table->string('attID', 15)->unique();
             $table->string('time_in', 35)->nullable();
             $table->string('time_out', 35)->nullable();
             $table->string('date', 30)->nullable();
