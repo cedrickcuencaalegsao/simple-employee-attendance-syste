@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -18,9 +19,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'uuid',
+        'username',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'department',
+        'position',
         'email',
         'password',
+        'is_admin',
+        'is_deleted',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -44,5 +55,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'uuid', 'uuid');
     }
 }
