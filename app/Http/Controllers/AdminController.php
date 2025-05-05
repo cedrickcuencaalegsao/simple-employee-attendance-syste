@@ -24,6 +24,51 @@ class AdminController extends Controller
         $employee = $this->getUserByUUID($uuid);
         return view('checkattendance', compact("employee"));
     }
+    public function editEmployee(string $uuid): View
+    {
+        $data = User::where('uuid', $uuid)->first();
+        return view('editEmployee', compact("data"));
+    }
+    public function saveEditEmploye(Request $request)
+    {
+
+
+
+        $request->validate([
+            'uuid' => 'required|string|exists:users,uuid',
+            'username' => 'required|string',
+            'email' => 'required|email',
+            'first_name' => 'required|string',
+            'middle_name' => 'nullable|string',
+            'last_name' => 'required|string',
+            'department' => 'required|string',
+            'position' => 'required|string',
+        ]);
+
+        $user = User::where('uuid', $request->uuid)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        if (!Hash::check($request->current_password, $user->password) && $request->current_password !== null) {
+            return redirect()->back()->with('error', 'Current password is incorrect');
+        }
+
+        User::where('uuid', $request->uuid)->update([
+            'username' => $request->username,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'department' => $request->department,
+            'position' => $request->position,
+            'password' => Hash::make($request->new_password),
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Employee updated successfully');
+    }
     public function saveNewEmployee(Request $request)
     {
         $request->validate([

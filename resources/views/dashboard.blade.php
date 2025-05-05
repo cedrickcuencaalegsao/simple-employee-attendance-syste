@@ -53,7 +53,7 @@
                         <td>{{ $employee['position'] }}</td>
                         <td>
                             <a href="{{ route('check.attendance', [$employee['uuid']]) }}">Check Attendance</a>
-                            <a href="#">Edit</a>
+                            <a href="{{route('edit.employee',["uuid"=> $employee['uuid']])}}">Edit</a>
                             <form action="#" method="POST">
                                 @csrf
                                 <button type="submit">Delete</button>
@@ -200,7 +200,7 @@
         border-radius: 4px;
         text-align: center;
     }
-    
+
     @media (max-width: 768px) {
         body {
             padding-top: 100px; /* Increase padding for mobile */

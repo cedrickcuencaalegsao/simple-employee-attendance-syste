@@ -45,4 +45,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
         AdminController::class,
         'saveNewEmployee'
     ])->name('save.employee');
+    Route::get('/edit-employee/{uuid}', [
+        AdminController::class,
+        'editEmployee'
+    ])->name('edit.employee');
+    Route::post('/edit-employee', [
+        AdminController::class,
+        'saveEditEmploye'
+    ])->name('save.edit.employee');
 });
