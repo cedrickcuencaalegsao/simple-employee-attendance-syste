@@ -6,12 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\attendance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
     public function index()
     {
-        return view('attendance');
+        $user = Auth::user();
+        $employee = $this->getUserByUUID($user['uuid']);
+
+        return view('attendance', compact('employee'));
+    }
+    public function getUserByUUID($uuid): array
+    {
+        $data = User::with('attendance')->where('uuid', $uuid)->first()->toArray();
+        return $data;
     }
     public function timeInIndex()
     {
