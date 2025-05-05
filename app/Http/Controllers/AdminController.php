@@ -31,9 +31,6 @@ class AdminController extends Controller
     }
     public function saveEditEmploye(Request $request)
     {
-
-
-
         $request->validate([
             'uuid' => 'required|string|exists:users,uuid',
             'username' => 'required|string',
@@ -120,12 +117,24 @@ class AdminController extends Controller
     }
     public function getAllUsers(): array
     {
-        $data = User::with('attendance')->get()->toArray();
+        $data = User::with('attendance')->where('is_deleted', false)->get()->toArray();
         return $data;
     }
     public function getUserByUUID($uuid): array
     {
         $data = User::with('attendance')->where('uuid', $uuid)->first()->toArray();
         return $data;
+    }
+
+    public function delete(Request $request){
+        $isAdmin = User::where('uuid', $request->uuid)->first()->is_admin;
+        if ($isAdmin) {
+            return redirect()->back()->with('error', 'You cannot delete an admin user');
+        }
+        User::where('uuid', $request->uuid)->update([
+            'is_deleted' => true,
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Employee deleted successfully');
     }
 }

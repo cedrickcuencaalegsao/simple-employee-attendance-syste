@@ -53,4 +53,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         AdminController::class,
         'saveEditEmploye'
     ])->name('save.edit.employee');
+    Route::post('/delete-employee',[
+        AdminController::class,
+        'delete'
+    ])->name('delete.employee');
 });

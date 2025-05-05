@@ -54,8 +54,9 @@
                         <td>
                             <a href="{{ route('check.attendance', [$employee['uuid']]) }}">Check Attendance</a>
                             <a href="{{route('edit.employee',["uuid"=> $employee['uuid']])}}">Edit</a>
-                            <form action="#" method="POST">
+                            <form action="{{route('delete.employee')}}" method="POST">
                                 @csrf
+                                <input type="hidden" name="uuid" value="{{ $employee['uuid'] }}">
                                 <button type="submit">Delete</button>
                             </form>
                         </td>
