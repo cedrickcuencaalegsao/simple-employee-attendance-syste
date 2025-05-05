@@ -4,45 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login Page</title>
+    <title>Time In</title>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <h1>Login</h1>
+    <div class="container">
+        <div class="time-in-card">
+            <h1>Time In</h1>
             @if (session('error'))
-                <p class="error-message">{{ session('error') }}</p>
+                <div class="error-message">
+                    {{ session('error') }}
+                </div>
             @endif
             @if (session('success'))
-                <p class="success-message">{{ session('success') }}</p>
+                <div class="success-message">
+                    {{ session('success') }}
+                </div>
             @endif
-            <form action="{{ route('login') }}" method="POST">
+            <form action="{{route('time.in')}}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" name="username" id="username">
+                    <input type="text" id="username" name="username">
                     @error('username')
                         <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password">
-                    @error('password')
-                        <p class="error">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <button type="submit">Login</button>
+                <button type="submit" class="time-in-btn">Time In</button>
             </form>
-            <div class="time-buttons">
-                <div class="time-in">
-                    <a href="{{route('time.in.index')}}" class="time-button time-in-button">Time In</a>
-                </div>
-                <div class="time-out">
-                    <a href="{{route('time.out.index')}}" class="time-button time-out-button">Time Out</a>
-                </div>
+            <div class="back-link">
+                <a href="{{ route('login.page') }}">← Back to Login</a>
             </div>
         </div>
     </div>
@@ -55,6 +45,7 @@
             --white: #ffffff;
             --gray: #f5f5f5;
             --error-red: #dc3545;
+            --success-green: #28a745;
         }
 
         body {
@@ -68,13 +59,13 @@
             background-color: var(--gray);
         }
 
-        .login-container {
+        .container {
             width: 100%;
             max-width: 400px;
             padding: 2rem;
         }
 
-        .login-card {
+        .time-in-card {
             background-color: var(--white);
             padding: 2rem;
             border-radius: 8px;
@@ -83,8 +74,8 @@
 
         h1 {
             color: var(--dark-blue);
-            margin: 0 0 1.5rem 0;
             text-align: center;
+            margin: 0 0 1.5rem 0;
             font-size: 1.8rem;
         }
 
@@ -100,13 +91,12 @@
         }
 
         input {
-            width: calc(100% - 0.1rem); /* Subtracting padding from width */
+            width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
-            transition: border-color 0.3s;
-            box-sizing: border-box; /* Include padding in width calculation */
+            box-sizing: border-box;
         }
 
         input:focus {
@@ -115,7 +105,7 @@
             box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
         }
 
-        button {
+        .time-in-btn {
             width: 100%;
             padding: 0.75rem;
             background-color: var(--medium-blue);
@@ -125,86 +115,62 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            box-sizing: border-box; /* Include padding in width calculation */
         }
 
-        button:hover {
+        .time-in-btn:hover {
             background-color: var(--light-blue);
         }
 
-        .error-message,
+        .error-message {
+            background-color: var(--error-red);
+            color: var(--white);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .success-message {
+            background-color: var(--success-green);
+            color: var(--white);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
         .error {
             color: var(--error-red);
             font-size: 0.875rem;
             margin-top: 0.25rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0;
         }
 
-        .success-message {
-            color: #28a745;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            margin-bottom: 0.5rem;
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: var(--medium-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-link a:hover {
+            opacity: 0.8;
         }
 
         @media (max-width: 768px) {
-            .login-container {
+            .container {
                 padding: 1rem;
             }
 
-            .login-card {
+            .time-in-card {
                 padding: 1.5rem;
             }
         }
-        .time-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.time-in, .time-out {
-    flex: 1;
-}
-
-.time-button {
-    display: block;
-    width: 85%;
-    padding: 0.75rem;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: opacity 0.3s;
-}
-
-.time-button:hover {
-    opacity: 0.9;
-}
-
-.time-in-button {
-    background-color: #28a745;
-    color: var(--white);
-}
-
-.time-out-button {
-    background-color: #dc3545;
-    color: var(--white);
-}
-
-/* Update existing media query */
-@media (max-width: 500px) {
-    .login-container {
-        padding: 1rem;
-    }
-
-    .login-card {
-        padding: 1.5rem;
-    }
-
-    .time-buttons {
-        flex-direction: column;
-    }
-}
     </style>
 </body>
 </html>

@@ -15,6 +15,23 @@ Route::middleware('guest')->group(function () {
         AuthController::class,
         'login'
     ])->name('login');
+
+    Route::get('/timeIn', [
+        AttendanceController::class,
+        'timeInIndex'
+    ])->name('time.in.index');
+    Route::post('/timeIn', [
+        AttendanceController::class,
+        'timeIn'
+    ])->name('time.in');
+    Route::get('/timeOut', [
+        AttendanceController::class,
+        'timeOutIndex'
+    ])->name('time.out.index');
+    Route::post('/timeOut', [
+        AttendanceController::class,
+        'timeOut'
+    ])->name('time.out');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/attendance', [
@@ -26,6 +43,8 @@ Route::middleware('auth')->group(function () {
         AuthController::class,
         'logout'
     ])->name('logout');
+
+
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
