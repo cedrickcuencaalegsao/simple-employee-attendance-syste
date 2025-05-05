@@ -1,82 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Add Employee</title>
+    <title>Edit Employee</title>
 </head>
-
 <body>
     <div class="navbar">
         <div class="navbar-content">
-
-            <a href="{{ route('dashboard') }}" class="back-button">← Back to Dashboard</a>
-            <h1>Add New Employee</h1>
+            <a href="{{route('dashboard')}}" class="back-button">← Back to Dashboard</a>
+            <h1>Edit Employee</h1>
         </div>
     </div>
 
     <div class="form-container">
         @if (session('error'))
-            <div class="error-message">{{ session('error') }}</div>
+            <div class="error-message">
+                {{ session('error') }}
+            </div>
         @endif
 
-        <form action="{{ route('add.employee') }}" method="POST">
+        @if (session('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{route('save.edit.employee')}}" method="POST">
             @csrf
             <div class="form-group">
+                <label for="uuid">UUID:</label>
+                <input type="text" id="uuid" name="uuid" value="{{$data['uuid']}}" readonly>
+                @error('uuid')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username">
+                <input type="text" id="username" name="username" value="{{$data['username']}}">
                 @error('username')
-                    <p class="error">Username is required.</p>
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" value="{{$data['email']}}">
+                @error('email')
+                    <p class="error">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="first_name">First Name:</label>
-                    <input type="text" id="first_name" name="first_name">
+                    <input type="text" id="first_name" name="first_name" value="{{$data['first_name']}}">
                     @error('first_name')
-                        <p class="error">First name is required.</p>
+                        <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="middle_name">Middle Name:</label>
-                    <input type="text" id="middle_name" name="middle_name">
+                    <input type="text" id="middle_name" name="middle_name" value="{{$data['middle_name']}}">
                 </div>
 
                 <div class="form-group">
                     <label for="last_name">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name">
+                    <input type="text" id="last_name" name="last_name" value="{{$data['last_name']}}">
                     @error('last_name')
-                        <p class="error">Last name is required.</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email">
-                @error('email')
-                    <p class="error">Email is required.</p>
-                @enderror
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
-                    @error('password')
-                        <p class="error">Password is required.</p>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="password_confirmation">Confirm Password:</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation">
-                    @error('password_confirmation')
-                        <p class="error">Password Confirmation is required.</p>
+                        <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -112,7 +106,33 @@
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">Add Employee</button>
+            <div class="password-container">
+                <div class="form-group">
+                    <label for="current_password">Current Password:</label>
+                    <input type="password" name="current_password" id="current_password">
+                    @error('current_password')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">New Password:</label>
+                    <input type="password" name="new_password" id="new_password">
+                    @error('new_password')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" name="confirm_password" id="confirm_password">
+                    @error('confirm_password')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Changes</button>
         </form>
     </div>
 
@@ -124,12 +144,12 @@
             --white: #ffffff;
             --gray: #f5f5f5;
             --error-red: #dc3545;
+            --success-green: #28a745;
         }
 
         body {
             margin: 0;
             padding-top: 80px;
-            /* Add padding to account for fixed navbar */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--gray);
         }
@@ -179,47 +199,7 @@
             padding: 2rem;
             background-color: var(--white);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            width: 100%;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--dark-blue);
-            font-weight: 500;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--medium-blue);
-            box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
-        }
-
-        .error {
-            color: var(--error-red);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .error-message {
@@ -230,15 +210,54 @@
             margin-bottom: 1rem;
         }
 
+        .success-message {
+            background-color: var(--success-green);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .error {
+            color: var(--error-red);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--medium-blue);
+            box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
+        }
+
         .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
             background-color: var(--medium-blue);
             color: var(--white);
             border: none;
-            padding: 1rem 2rem;
             border-radius: 4px;
-            cursor: pointer;
             font-size: 1rem;
-            width: 100%;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
 
@@ -246,20 +265,7 @@
             background-color: var(--light-blue);
         }
 
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M8 12L2 6h12l-6 6z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
-        }
-
         @media (max-width: 768px) {
-            body {
-                padding-top: 100px;
-                /* Increase padding for mobile */
-            }
-
             .form-row {
                 flex-direction: column;
             }
@@ -271,5 +277,4 @@
         }
     </style>
 </body>
-
 </html>

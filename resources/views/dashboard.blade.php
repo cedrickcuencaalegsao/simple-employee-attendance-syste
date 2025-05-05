@@ -53,9 +53,10 @@
                         <td>{{ $employee['position'] }}</td>
                         <td>
                             <a href="{{ route('check.attendance', [$employee['uuid']]) }}">Check Attendance</a>
-                            <a href="#">Edit</a>
-                            <form action="#" method="POST">
+                            <a href="{{route('edit.employee',["uuid"=> $employee['uuid']])}}">Edit</a>
+                            <form action="{{route('delete.employee')}}" method="POST">
                                 @csrf
+                                <input type="hidden" name="uuid" value="{{ $employee['uuid'] }}">
                                 <button type="submit">Delete</button>
                             </form>
                         </td>
@@ -200,7 +201,7 @@
         border-radius: 4px;
         text-align: center;
     }
-    
+
     @media (max-width: 768px) {
         body {
             padding-top: 100px; /* Increase padding for mobile */

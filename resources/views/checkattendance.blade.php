@@ -10,8 +10,10 @@
 
 <body>
     <div class="navbar">
-        <a href="{{ route('dashboard') }}" class="back-button">← Back to Dashboard</a>
-        <h1>Check Attendance</h1>
+        <div class="navbar-content">
+            <a href="{{ route('dashboard') }}" class="back-button">← Back to Dashboard</a>
+            <h1>Check Attendance</h1>
+        </div>
     </div>
     <div class="content-wrapper">
         <div class="employee-profile">
@@ -79,16 +81,30 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             color: var(--white);
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
         }
 
         .back-button {
             color: var(--white);
             text-decoration: none;
             font-size: 1rem;
-            display: inline-block;
-            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: opacity 0.3s;
         }
 

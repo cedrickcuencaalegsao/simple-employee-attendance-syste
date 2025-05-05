@@ -24,6 +24,48 @@ class AdminController extends Controller
         $employee = $this->getUserByUUID($uuid);
         return view('checkattendance', compact("employee"));
     }
+    public function editEmployee(string $uuid): View
+    {
+        $data = User::where('uuid', $uuid)->first();
+        return view('editEmployee', compact("data"));
+    }
+    public function saveEditEmploye(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required|string|exists:users,uuid',
+            'username' => 'required|string',
+            'email' => 'required|email',
+            'first_name' => 'required|string',
+            'middle_name' => 'nullable|string',
+            'last_name' => 'required|string',
+            'department' => 'required|string',
+            'position' => 'required|string',
+        ]);
+
+        $user = User::where('uuid', $request->uuid)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        if (!Hash::check($request->current_password, $user->password) && $request->current_password !== null) {
+            return redirect()->back()->with('error', 'Current password is incorrect');
+        }
+
+        User::where('uuid', $request->uuid)->update([
+            'username' => $request->username,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'department' => $request->department,
+            'position' => $request->position,
+            'password' => Hash::make($request->new_password),
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Employee updated successfully');
+    }
     public function saveNewEmployee(Request $request)
     {
         $request->validate([
@@ -75,12 +117,24 @@ class AdminController extends Controller
     }
     public function getAllUsers(): array
     {
-        $data = User::with('attendance')->get()->toArray();
+        $data = User::with('attendance')->where('is_deleted', false)->get()->toArray();
         return $data;
     }
     public function getUserByUUID($uuid): array
     {
         $data = User::with('attendance')->where('uuid', $uuid)->first()->toArray();
         return $data;
+    }
+
+    public function delete(Request $request){
+        $isAdmin = User::where('uuid', $request->uuid)->first()->is_admin;
+        if ($isAdmin) {
+            return redirect()->back()->with('error', 'You cannot delete an admin user');
+        }
+        User::where('uuid', $request->uuid)->update([
+            'is_deleted' => true,
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Employee deleted successfully');
     }
 }

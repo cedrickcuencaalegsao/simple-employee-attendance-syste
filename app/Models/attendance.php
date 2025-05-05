@@ -8,10 +8,14 @@ class attendance extends Model
 {
     protected $table = 'attendance';
     protected $fillable = [
-        'user_id',
+        'uuid',
+        'attID',
         'time_in',
         'time_out',
         'date',
+        'is_deleted',
+        'created_at',
+        'updated_at'
     ];
 
     public function user()
