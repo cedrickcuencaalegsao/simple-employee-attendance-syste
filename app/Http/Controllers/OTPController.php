@@ -61,25 +61,17 @@ class OTPController extends Controller
         $sessionEmail = session('otp_email');
 
         if (! $sessionOTP || ! $sessionEmail) {
-            return response()->json([
-                'success' => false,
-                'message' => 'OTP session expired. Please request a new OTP.',
-            ], 400);
+            return redirect()->back()->with('message', 'OTP session expired. Please request a new OTP.');
         }
 
         if ($request->otp == $sessionOTP) {
-            // Clear OTP from session but keep email for password reset
             session()->forget('otp');
 
-            return response()->json([
-                'success' => true,
-                'message' => 'OTP verified successfully!',
-            ]);
+            return redirect()->route('show.update.password')->with('email', $sessionEmail);
+
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid OTP code. Please try again.',
-        ], 400);
+        return redirect()->back()->with('message', 'Invalid OTP code. Please try again.');
+
     }
 }

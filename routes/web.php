@@ -34,6 +34,16 @@ Route::middleware('guest')->group(function () {
         'timeOut',
     ])->name('time.out');
 
+    Route::get('/update-password', [
+        AuthController::class,
+        'showUpdatePassword',
+    ])->name('show.update.password');
+
+    Route::post('/update-password', [
+        AuthController::class,
+        'updatePassword',
+    ])->name('update.password');
+
     Route::get('/send-otp', [OTPController::class, 'viewSentOTP'])->name('password.request');
     Route::post('/send-otp', [OTPController::class, 'sendOTP'])->name('sendOTP');
     Route::get('/verify-otp', [OTPController::class, 'viewVerifyOTP'])->name('verifyOTP');
