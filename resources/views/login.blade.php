@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login Page</title>
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-card">
@@ -36,12 +38,15 @@
 
                 <button type="submit">Login</button>
             </form>
+            <div class="forgot-password">
+                <a href="{{ route('password.request')}}">Forgot your password?</a>
+            </div>
             <div class="time-buttons">
                 <div class="time-in">
-                    <a href="{{route('time.in.index')}}" class="time-button time-in-button">Time In</a>
+                    <a href="{{ route('time.in.index') }}" class="time-button time-in-button">Time In</a>
                 </div>
                 <div class="time-out">
-                    <a href="{{route('time.out.index')}}" class="time-button time-out-button">Time Out</a>
+                    <a href="{{ route('time.out.index') }}" class="time-button time-out-button">Time Out</a>
                 </div>
             </div>
         </div>
@@ -100,13 +105,15 @@
         }
 
         input {
-            width: calc(100% - 0.1rem); /* Subtracting padding from width */
+            width: calc(100% - 0.1rem);
+            /* Subtracting padding from width */
             padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
             transition: border-color 0.3s;
-            box-sizing: border-box; /* Include padding in width calculation */
+            box-sizing: border-box;
+            /* Include padding in width calculation */
         }
 
         input:focus {
@@ -125,7 +132,8 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            box-sizing: border-box; /* Include padding in width calculation */
+            box-sizing: border-box;
+            /* Include padding in width calculation */
         }
 
         button:hover {
@@ -138,6 +146,23 @@
             font-size: 0.875rem;
             margin-top: 0.25rem;
             margin-bottom: 0.5rem;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+
+        .forgot-password a {
+            color: var(--medium-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+            color: var(--light-blue);
         }
 
         .success-message {
@@ -156,55 +181,58 @@
                 padding: 1.5rem;
             }
         }
+
         .time-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
 
-.time-in, .time-out {
-    flex: 1;
-}
+        .time-in,
+        .time-out {
+            flex: 1;
+        }
 
-.time-button {
-    display: block;
-    width: 85%;
-    padding: 0.75rem;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: opacity 0.3s;
-}
+        .time-button {
+            display: block;
+            width: 85%;
+            padding: 0.75rem;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
 
-.time-button:hover {
-    opacity: 0.9;
-}
+        .time-button:hover {
+            opacity: 0.9;
+        }
 
-.time-in-button {
-    background-color: #28a745;
-    color: var(--white);
-}
+        .time-in-button {
+            background-color: #28a745;
+            color: var(--white);
+        }
 
-.time-out-button {
-    background-color: #dc3545;
-    color: var(--white);
-}
+        .time-out-button {
+            background-color: #dc3545;
+            color: var(--white);
+        }
 
-/* Update existing media query */
-@media (max-width: 500px) {
-    .login-container {
-        padding: 1rem;
-    }
+        /* Update existing media query */
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 1rem;
+            }
 
-    .login-card {
-        padding: 1.5rem;
-    }
+            .login-card {
+                padding: 1.5rem;
+            }
 
-    .time-buttons {
-        flex-direction: column;
-    }
-}
+            .time-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </body>
+
 </html>
