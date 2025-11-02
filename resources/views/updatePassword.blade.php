@@ -4,39 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify OTP - Password Reset</title>
+    <title>Update Password</title>
 </head>
 
 <body>
-    <div class="verify-container">
-        <div class="verify-card">
-            <h1>Verify OTP</h1>
-
+    <div class="update-container">
+        <div class="update-card">
+            <h1>Update Password</h1>
             @if (session('error'))
                 <p class="error-message">{{ session('error') }}</p>
             @endif
             @if (session('success'))
                 <p class="success-message">{{ session('success') }}</p>
             @endif
-
-            <p class="instruction">Enter the OTP code sent to your email to continue with password reset.</p>
-
-            <form action="{{ route('password.otp.verify') }}" method="POST">
+            <form action="{{ route('update.password') }}" method="POST">
                 @csrf
+                <input type="hidden" name="email" value="{{ session('otp_email') }}">
                 <div class="form-group">
-                    <label for="otp">OTP Code</label>
-                    <input type="text" name="otp" id="otp" placeholder="Enter 6-digit code" maxlength="6"
-                        pattern="\d{6}" required autofocus>
-                    @error('otp')
+                    <label for="new_password">New Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" name="new_password" id="new_password" required minlength="6">
+                        <span class="toggle-password" onclick="togglePassword('new_password', this)">&#128065;</span>
+                    </div>
+                    @error('new_password')
                         <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <button type="submit" class="verify-btn">Verify OTP</button>
+                <div class="form-group">
+                    <label for="confirm_password">Retype New Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" name="confirm_password" id="confirm_password" required minlength="6">
+                        <span class="toggle-password"
+                            onclick="togglePassword('confirm_password', this)">&#128065;</span>
+                    </div>
+                    @error('confirm_password')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit" class="update-btn">Update Password</button>
             </form>
         </div>
     </div>
-
     <style>
         :root {
             --dark-blue: #1a237e;
@@ -58,13 +66,13 @@
             background-color: var(--gray);
         }
 
-        .verify-container {
+        .update-container {
             width: 100%;
             max-width: 420px;
             padding: 2rem;
         }
 
-        .verify-card {
+        .update-card {
             background-color: var(--white);
             padding: 2rem;
             border-radius: 8px;
@@ -76,12 +84,6 @@
             color: var(--dark-blue);
             margin: 0 0 1rem 0;
             font-size: 1.6rem;
-        }
-
-        .instruction {
-            color: #555;
-            margin-bottom: 1.5rem;
-            font-size: 0.98rem;
         }
 
         .form-group {
@@ -96,24 +98,35 @@
             font-weight: 500;
         }
 
-        input[type="text"] {
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        input[type="password"] {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 2.5rem 0.75rem 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 1.2rem;
+            font-size: 1rem;
             box-sizing: border-box;
-            text-align: center;
-            letter-spacing: 0.2em;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--medium-blue);
-            box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--medium-blue);
+            user-select: none;
         }
 
-        .verify-btn {
+        .toggle-password.active {
+            color: var(--light-blue);
+        }
+
+        .update-btn {
             width: 100%;
             padding: 0.75rem;
             background-color: var(--medium-blue);
@@ -122,10 +135,10 @@
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.3s;
         }
 
-        .verify-btn:hover {
+        .update-btn:hover {
             background-color: var(--light-blue);
         }
 
@@ -142,59 +155,28 @@
             margin-top: 0.5rem;
         }
 
-        .action-links {
-            margin-top: 1.5rem;
-        }
-
-        .resend {
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-            color: #555;
-        }
-
-        .inline-form {
-            display: inline;
-        }
-
-        .resend-link {
-            background: none;
-            border: none;
-            padding: 0;
-            color: var(--medium-blue);
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .resend-link:hover {
-            color: var(--light-blue);
-        }
-
-        .back-login {
-            margin-top: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .back-login a {
-            color: var(--medium-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .back-login a:hover {
-            text-decoration: underline;
-        }
-
         @media (max-width: 480px) {
-            .verify-container {
+            .update-container {
                 padding: 1rem;
             }
 
-            .verify-card {
+            .update-card {
                 padding: 1.5rem;
             }
         }
     </style>
+    <script>
+        function togglePassword(fieldId, icon) {
+            const input = document.getElementById(fieldId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.add('active');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('active');
+            }
+        }
+    </script>
 </body>
 
 </html>
